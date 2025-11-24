@@ -1,0 +1,33 @@
+version: 2
+models:
+  - name: dim_customers
+    description: "Dimension table containing customer details for Northwind. Each row represents a unique customer."
+    columns:
+      - name: customer_key
+        description: "Surrogate key for the customer dimension, derived from customer_id."
+        tests: [not_null, unique]
+  - name: dim_products
+    description: "Dimension table containing product details and category information. Each row represents a unique product."
+    columns:
+      - name: product_key
+        description: "Surrogate key for the product dimension, derived from product_id."      
+        tests: [not_null, unique]
+  - name: dim_dates
+    description: "Date dimension table generated from the range of order dates. Useful for time-based analysis."
+    columns:
+      - name: date_day
+        tests: [not_null, unique]
+  - name: fct_orders
+    description: "Fact table at the order level, aggregating line items and freight charges. Each row represents a unique order."  
+    columns:
+      - name: order_id
+        description: "Primary key for the order fact table."
+        tests: [not_null, unique]
+  - name: fct_order_items
+    description: "Fact table at the line-item level. Each row represents a product on an order, including pricing, quantity, discount, and calculated net amounts."
+    columns:
+      - name: order_item_key
+        description: "Surrogate key for the line item level, hash/concatenation of (order_id, product_id) into a single string."
+        tests:
+          - not_null
+          - unique
